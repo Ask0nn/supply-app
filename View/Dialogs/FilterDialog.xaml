@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="SupplyApp.View.Dialogs.FilterDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converter="clr-namespace:SupplyApp.Converter"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+             MinWidth="700" MinHeight="350">
+    <UserControl.Resources>
+        <converter:ValidationConverter x:Key="ValidConverter"/>
+        <Style TargetType="ComboBox" BasedOn="{StaticResource MaterialDesignOutlinedComboBox}">
+            <Setter Property="IsEditable" Value="False"/>
+            <Setter Property="Margin" Value="0 15"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="DisplayMemberPath" Value="Name"/>
+            <Setter Property="md:ValidationAssist.Background" Value="Transparent"/>
+            <Setter Property="md:ValidationAssist.FontSize" Value="14"/>
+            <Setter Property="md:ValidationAssist.OnlyShowOnFocus" Value="True"/>
+        </Style>
+        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+            <Setter Property="md:TextFieldAssist.HasClearButton" Value="True"/>
+            <Setter Property="Margin" Value="0 15"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="MaxLength" Value="999"/>
+            <Setter Property="md:ValidationAssist.Background" Value="Transparent"/>
+            <Setter Property="md:ValidationAssist.FontSize" Value="14"/>
+            <Setter Property="md:ValidationAssist.OnlyShowOnFocus" Value="True"/>
+        </Style>
+        <Style TargetType="DatePicker" BasedOn="{StaticResource MaterialDesignOutlinedDatePicker}">
+            <Setter Property="Margin" Value="0 15"/>
+            <Setter Property="Width" Value="300"/>
+            <Setter Property="md:ValidationAssist.Background" Value="Transparent"/>
+            <Setter Property="md:ValidationAssist.FontSize" Value="14"/>
+            <Setter Property="md:ValidationAssist.OnlyShowOnFocus" Value="True"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.ColumnSpan="2" Text="Фильтрация заявок"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
+
+        <UniformGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                     Columns="2" Rows="5" Margin="0 10">
+            <TextBox md:HintAssist.Hint="Номер" Name="NumBox"
+                     Text="{Binding Filter.Num, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox md:HintAssist.Hint="Статус" Name="StatusBox"
+                      ItemsSource="{Binding Statuses, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Filter.Status, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox md:HintAssist.Hint="Поставщик" Name="ProviderBox"
+                      ItemsSource="{Binding Providers, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Filter.Provider, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox md:HintAssist.Hint="Инициатор" Name="InitiatorBox"
+                      ItemsSource="{Binding Initiators, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Filter.Initiator, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox md:HintAssist.Hint="Значимость" Name="SignificanceBox"
+                      ItemsSource="{Binding Significances, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Filter.Significance, UpdateSourceTrigger=PropertyChanged}"/>
+            <ComboBox md:HintAssist.Hint="Исполнитель" Name="ExecutorBox"
+                      ItemsSource="{Binding Executors, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding Filter.Executor, UpdateSourceTrigger=PropertyChanged}"/>
+            <DatePicker md:HintAssist.Hint="Дата заявки (старт)" Name="StartDateBox">
+                <DatePicker.SelectedDate>
+                    <Binding Path="Filter.StartDate" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.Converter>
+                            <converter:DateConverter/>
+                        </Binding.Converter>
+                    </Binding>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+            <DatePicker md:HintAssist.Hint="Дата заявки (конец)" Name="EndDateBox">
+                <DatePicker.SelectedDate>
+                    <Binding Path="Filter.EndDate" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.Converter>
+                            <converter:DateConverter/>
+                        </Binding.Converter>
+                    </Binding>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+            <DatePicker md:HintAssist.Hint="Дата исполнения (старт)" Name="StartExecutionDateBox">
+                <DatePicker.SelectedDate>
+                    <Binding Path="Filter.StartExecutionDate" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.Converter>
+                            <converter:DateConverter/>
+                        </Binding.Converter>
+                    </Binding>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+            <DatePicker md:HintAssist.Hint="Дата исполнения (конец)" Name="EndExecutionDateBox">
+                <DatePicker.SelectedDate>
+                    <Binding Path="Filter.EndExecutionDate" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.Converter>
+                            <converter:DateConverter/>
+                        </Binding.Converter>
+                    </Binding>
+                </DatePicker.SelectedDate>
+            </DatePicker>
+        </UniformGrid>
+
+        <UniformGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                     Columns="2">
+            <Button Content="Отфильтровать" Margin="0 0 5 0"
+                    Command="md:DialogHost.CloseDialogCommand"
+                    CommandParameter="{Binding Filter, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Сброс"  Margin="5 0 0 0"
+                    Command="{Binding ResetCommand}"/>
+        </UniformGrid>
+    </Grid>
+</UserControl>

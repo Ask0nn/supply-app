@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="SupplyApp.View.Dialogs.DataSourceDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:SupplyApp.ViewModel"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+             MinWidth="600" MinHeight="450">
+    <UserControl.DataContext>
+        <vm:DataSourceViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Подключение к базе данных" Margin="0 10 0 10"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
+
+        <UniformGrid Grid.Row="1" Columns="2">
+            <TextBox md:TextFieldAssist.HasFilledTextField="True"
+                     md:TextFieldAssist.TextFieldCornerRadius="3"
+                     md:TextFieldAssist.HasClearButton="True"
+                     md:TextFieldAssist.UnderlineBrush="Orange"
+                     md:HintAssist.Hint="Название"
+                     Text="{Binding EditBox, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Content="Добавить новое подключение" Margin="10 0"
+                    Command="{Binding AddCommand}"/>
+        </UniformGrid>
+
+        <ListView Grid.Row="2"
+                  ItemsSource="{Binding Connections, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedItem, UpdateSourceTrigger=PropertyChanged}">
+            <ListView.ContextMenu>
+                <ContextMenu Margin="-10">
+                    <MenuItem Header="Удалить" Command="{Binding RemoveCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                </ContextMenu>
+            </ListView.ContextMenu>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn DisplayMemberBinding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path, UpdateSourceTrigger=PropertyChanged}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <Button Grid.Row="3" Content="Подключиться" Margin="10 0"
+                Command="{Binding SetConnectionCommand, UpdateSourceTrigger=PropertyChanged}"/>
+        <Button Grid.Row="4" Content="Закрыть" Margin="10"
+                Command="md:DialogHost.CloseDialogCommand"/>
+
+        <md:Snackbar Grid.Row="2" 
+                     MessageQueue="{Binding SnackBarMessageQueue, UpdateSourceTrigger=PropertyChanged}"
+                     Background="{StaticResource MaterialDesignDarkBackground}"
+                     Foreground="{StaticResource MaterialDesignDarkForeground}"
+                     VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>

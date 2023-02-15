@@ -1,0 +1,16 @@
+{
+  "Active": {
+    "Name": "1",
+    "Path": "C:\\Users\\admin\\Desktop\\[БД][12.01.23].sqlite"
+  },
+  "Connections": [
+    {
+      "Name": "1",
+      "Path": "C:\\Users\\admin\\Desktop\\[БД][12.01.23].sqlite"
+    },
+    {
+      "Name": "2",
+      "Path": "C:\\Users\\admin\\Desktop\\test.sqlite"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SupplyApp": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}

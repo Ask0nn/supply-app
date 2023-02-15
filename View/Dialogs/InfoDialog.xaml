@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="SupplyApp.View.Dialogs.InfoDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converter="clr-namespace:SupplyApp.Converter"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+             MinWidth="700" MinHeight="350">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" BasedOn="{StaticResource MaterialDesignTextBlock}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Style="{StaticResource MaterialDesignFlatButton}" IsDefault="True"
+                Command="md:DialogHost.CloseDialogCommand"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top">
+            <ui:SymbolIcon Symbol="Dismiss20" FontSize="16" ToolTip="Закрыть"/>
+        </Button>
+
+        <TextBlock  Grid.Row="0" Text="Supply App"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
+
+        <UniformGrid Grid.Row="1" Columns="2" Margin="0 20">
+            <TextBlock Text="Версия программы: 1.0.2"/>
+            <TextBlock Text="Разработал: Ask0n"/>
+            <TextBlock>
+                <Hyperlink NavigateUri="https://t.me/Ask0n" RequestNavigate="Hyperlink_OnRequestNavigate">
+                    Мой телеграмм
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink NavigateUri="mailto:askonzir@gmail.com" RequestNavigate="Hyperlink_OnRequestNavigate">
+                    Эл. почта
+                </Hyperlink>
+            </TextBlock>
+        </UniformGrid>
+
+        <UniformGrid Grid.Row="2" Columns="2" VerticalAlignment="Bottom">
+            <TextBlock>
+                <Hyperlink NavigateUri="https://github.com/Ask0nn/supply-app" RequestNavigate="Hyperlink_OnRequestNavigate">
+                    Страница проекта
+                </Hyperlink>
+            </TextBlock>
+            <TextBlock>
+                <Hyperlink NavigateUri="https://github.com/Ask0nn/supply-app/issues" RequestNavigate="Hyperlink_OnRequestNavigate">
+                    Отчеты об ошибках
+                </Hyperlink>
+            </TextBlock>
+        </UniformGrid>
+        
+    </Grid>
+</UserControl>

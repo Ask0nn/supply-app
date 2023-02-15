@@ -1,0 +1,148 @@
+﻿<UserControl x:Class="SupplyApp.View.Dialogs.FilesDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converter="clr-namespace:SupplyApp.Converter"
+             xmlns:rule="clr-namespace:SupplyApp.Validation"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:md="http://materialdesigninxaml.net/winfx/xaml/themes"
+             Background="{ui:ThemeResource ApplicationBackgroundBrush}"
+             MinWidth="700" MinHeight="550">
+    <UserControl.Resources>
+        <converter:ValidationConverter x:Key="ValidConverter"/>
+        <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
+            <Setter Property="md:ValidationAssist.Background" Value="Transparent"/>
+            <Setter Property="md:ValidationAssist.FontSize" Value="14"/>
+            <Setter Property="md:ValidationAssist.OnlyShowOnFocus" Value="True"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="Файлы заявки" Margin="0 10 0 10"
+                   HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
+
+        <Menu Grid.Row="1">
+            <ui:MenuItem Command="{Binding ShowAddCommand}">
+                <ui:MenuItem.Header>
+                    <ui:SymbolIcon Symbol="DocumentAdd20" ToolTip="Добавить"/>
+                </ui:MenuItem.Header>
+            </ui:MenuItem>
+            <ui:MenuItem Command="{Binding RemoveCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ui:MenuItem.Header>
+                    <ui:SymbolIcon Symbol="Delete20" ToolTip="Удалить"/>
+                </ui:MenuItem.Header>
+                <ui:MenuItem.Style>
+                    <Style TargetType="{x:Type ui:MenuItem}">
+                        <Setter Property="IsEnabled" Value="True"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding AddVisibility, UpdateSourceTrigger=PropertyChanged}" Value="Visible">
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ui:MenuItem.Style>
+            </ui:MenuItem>
+            <ui:MenuItem Command="{Binding OpenFileCommand, UpdateSourceTrigger=PropertyChanged}">
+                <ui:MenuItem.Header>
+                    <ui:SymbolIcon Symbol="Open20" ToolTip="Открыть файл"/>
+                </ui:MenuItem.Header>
+            </ui:MenuItem>
+        </Menu>
+
+        <DataGrid  Grid.Row="2" AutoGenerateColumns="False" CanUserAddRows="False" CanUserDeleteRows="False"
+                   IsReadOnly="True" Margin="10" SelectionMode="Single"
+                   ItemsSource="{Binding Documents, UpdateSourceTrigger=PropertyChanged}"
+                   SelectedItem="{Binding SelectedDocument, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Style>
+                <Style TargetType="DataGrid" BasedOn="{StaticResource MaterialDesignDataGrid}">
+                    <Setter Property="IsManipulationEnabled" Value="True"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=AddBlock, Path=Visibility}" Value="Visible">
+                            <Setter Property="IsManipulationEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.Style>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Имя файла" 
+                                    Binding="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                <DataGridTextColumn Header="Путь" 
+                                    Binding="{Binding Path, UpdateSourceTrigger=PropertyChanged}"/>
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Открыть файл" Command="{Binding OpenFileCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem Header="Добавить" Command="{Binding ShowAddCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                    <MenuItem Header="Удалить" Command="{Binding RemoveCommand, UpdateSourceTrigger=PropertyChanged}"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+
+        <UniformGrid Grid.Row="3" Visibility="{Binding AddVisibility, UpdateSourceTrigger=PropertyChanged}"
+                     Columns="2" Name="AddBlock" Margin="10 0">
+            <TextBox md:TextFieldAssist.HasFilledTextField="True"
+                     md:TextFieldAssist.TextFieldCornerRadius="3"
+                     md:TextFieldAssist.UnderlineBrush="Orange"
+                     md:HintAssist.Hint="Путь к файлу"
+                     IsReadOnly="True"
+                     Margin="0 5 5 5"
+                     Name="PathOfFile">
+                <TextBox.Text>
+                <Binding Path="FilePath" UpdateSourceTrigger="PropertyChanged">
+                        <Binding.ValidationRules>
+                            <rule:IsEmptyValidation ValidatesOnTargetUpdated="True"/>
+                        </Binding.ValidationRules>
+                    </Binding>
+                </TextBox.Text>
+            </TextBox>
+            <Button Content="Выбрать файл"
+                    Command="{Binding SelectFileCommand}"
+                    Margin="5 0"/>
+        </UniformGrid>
+
+        <Button Grid.Row="4" Margin="10" Content="Добавить"
+                Visibility="{Binding AddVisibility, UpdateSourceTrigger=PropertyChanged}"
+                Command="{Binding AddCommand}">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                    <Setter Property="IsEnabled">
+                        <Setter.Value>
+                            <MultiBinding Converter="{StaticResource ValidConverter}">
+                                <Binding ElementName="PathOfFile" Path="(Validation.HasError)"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <Button Grid.Row="4" Margin="10" Content="Закрыть"
+                Command="md:DialogHost.CloseDialogCommand">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource MaterialDesignRaisedButton}">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding AddVisibility, UpdateSourceTrigger=PropertyChanged}" Value="Visible">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
+
+        <md:Snackbar Grid.Row="1" 
+                     MessageQueue="{Binding SnackBarMessageQueue, UpdateSourceTrigger=PropertyChanged}"
+                     Background="{StaticResource MaterialDesignDarkBackground}"
+                     Foreground="{StaticResource MaterialDesignDarkForeground}"
+                     VerticalAlignment="Center"
+                     Margin="20 0 0 0"/>
+    </Grid>
+</UserControl>
