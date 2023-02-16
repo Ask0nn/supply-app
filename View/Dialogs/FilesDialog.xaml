@@ -9,6 +9,7 @@
              MinWidth="700" MinHeight="550">
     <UserControl.Resources>
         <converter:ValidationConverter x:Key="ValidConverter"/>
+        <converter:FileNotFoundConverter x:Key="FileNotFoundConverter"/>
         <Style TargetType="TextBox" BasedOn="{StaticResource MaterialDesignOutlinedTextBox}">
             <Setter Property="md:ValidationAssist.Background" Value="Transparent"/>
             <Setter Property="md:ValidationAssist.FontSize" Value="14"/>
@@ -84,6 +85,11 @@
                     <MenuItem Header="Удалить" Command="{Binding RemoveCommand, UpdateSourceTrigger=PropertyChanged}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow" BasedOn="{StaticResource MaterialDesignDataGridRow}">
+                    <Setter Property="Background" Value="{Binding Path, Converter={StaticResource FileNotFoundConverter}, UpdateSourceTrigger=PropertyChanged}"/>
+                </Style>
+            </DataGrid.RowStyle>
         </DataGrid>
 
         <UniformGrid Grid.Row="3" Visibility="{Binding AddVisibility, UpdateSourceTrigger=PropertyChanged}"

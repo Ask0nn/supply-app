@@ -106,6 +106,11 @@ namespace SupplyApp.ViewModel
 
         public ICommand OpenFileCommand => new RelayCommand((obj) =>
         {
+            if (!File.Exists(SelectedDocument.Path))
+            {
+                SnackBarMessageQueue.Enqueue("Файл не найден");
+                return;
+            }
             var p = new Process();
             p.StartInfo = new ProcessStartInfo(SelectedDocument.Path)
             {
