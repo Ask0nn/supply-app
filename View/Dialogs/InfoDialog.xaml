@@ -33,7 +33,7 @@
                    HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="24" FontWeight="Bold"/>
 
         <UniformGrid Grid.Row="1" Columns="2" Margin="0 20">
-            <TextBlock Text="Версия программы: 1.0.2"/>
+            <TextBlock Text="Версия программы: 1.0.3"/>
             <TextBlock Text="Разработал: Ask0n"/>
             <TextBlock>
                 <Hyperlink NavigateUri="https://t.me/Ask0n" RequestNavigate="Hyperlink_OnRequestNavigate">
