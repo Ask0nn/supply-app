@@ -34,6 +34,9 @@
             <Setter Property="md:ValidationAssist.FontSize" Value="14"/>
             <Setter Property="md:ValidationAssist.OnlyShowOnFocus" Value="True"/>
         </Style>
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="Visibility" Value="Collapsed"/>
+        </Style>
     </UserControl.Resources>
 
     <Grid Margin="20">
@@ -148,20 +151,31 @@
         </StackPanel>
 
         <StackPanel Grid.Row="2" Grid.Column="2" Margin="10,5,10,5" MinWidth="400" Grid.RowSpan="2">
-            <Border Margin="0 5" 
-                    BorderBrush="{StaticResource PrimaryHueMidBrush}" 
-                    BorderThickness="1">
-                <ListView Height="240" ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                          ItemsSource="{Binding RequestItems, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding SelectedRequestItem, UpdateSourceTrigger=PropertyChanged}">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Item.Name, UpdateSourceTrigger=PropertyChanged}"/>
-                            <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Count, UpdateSourceTrigger=PropertyChanged}"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Border>
+            <UniformGrid Columns="2" Margin="0 5">
+                <TextBox md:HintAssist.Hint="Комментарий"
+                         md:TextFieldAssist.HasClearButton="False"
+                         md:TextFieldAssist.TextFieldCornerRadius="0"
+                         md:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                         AcceptsReturn="True"
+                         SpellCheck.IsEnabled="True"
+                         TextWrapping="Wrap"
+                         Margin="0 0 5 0"
+                         MaxHeight="250"
+                         Text="{Binding Request.Description, UpdateSourceTrigger=PropertyChanged}"/>
+                <Border BorderBrush="{StaticResource PrimaryHueMidBrush}" 
+                        BorderThickness="2">
+                    <ListView Height="240" ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                              ItemsSource="{Binding RequestItems, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedItem="{Binding SelectedRequestItem, UpdateSourceTrigger=PropertyChanged}">
+                        <ListView.View>
+                            <GridView >
+                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Item.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                <GridViewColumn Width="Auto" DisplayMemberBinding="{Binding Count, UpdateSourceTrigger=PropertyChanged}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Border>
+            </UniformGrid>
             <UniformGrid Columns="2" Margin="0 10 0 0">
                 <ComboBox md:HintAssist.Hint="Предмет" Name="ItemBox"
                           Margin="0 0 5 0"
@@ -178,7 +192,7 @@
                 </ComboBox>
                 <TextBox md:HintAssist.Hint="Количество" Name="CountBox"
                          MaxLength="3" 
-                         PreviewTextInput="UIElement_OnPreviewTextInput" 
+                         PreviewTextInput="UIElement_OnPreviewTextInput"
                          Margin="5 0 0 0">
                     <TextBox.Text>
                         <Binding Path="Count" UpdateSourceTrigger="PropertyChanged">
